@@ -1,0 +1,1116 @@
+[
+    {
+        "id": "42dd093e4768803b",
+        "type": "tab",
+        "label": "流程 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "e4d286fc7552c9d5",
+        "type": "tab",
+        "label": "用户登录后台",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "157fed32d6e19e95",
+        "type": "tab",
+        "label": "新建流程图 dev",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "0f56bc24f4500716",
+        "type": "tab",
+        "label": "prisma连接池",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "60783db58ebac2b0",
+        "type": "tab",
+        "label": "mysql连接池",
+        "disabled": true,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "511e0991817895ea",
+        "type": "tab",
+        "label": "GraphQL测试",
+        "disabled": true,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "dedaf7c3e3658fe7",
+        "type": "subflow",
+        "name": "校验token",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 80,
+                "y": 220,
+                "wires": [
+                    {
+                        "id": "260a55ebadf5153b"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 900,
+                "y": 140,
+                "wires": [
+                    {
+                        "id": "1ab23fc6d0c05fab",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "f069ddcef8ddd50e",
+        "type": "subflow",
+        "name": "http封装返回错误消息",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 280,
+                "y": 320,
+                "wires": [
+                    {
+                        "id": "c877e5721a72c205"
+                    }
+                ]
+            }
+        ],
+        "out": [],
+        "env": [],
+        "meta": {},
+        "color": "#FFAAAA",
+        "icon": "font-awesome/fa-sign-out"
+    },
+    {
+        "id": "3a66b1d0a2011dc7",
+        "type": "subflow",
+        "name": "http封装返回成功消息",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 160,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "231fc131ed034dda"
+                    }
+                ]
+            }
+        ],
+        "out": [],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "9b9ac8233e7948c8",
+        "type": "group",
+        "z": "e4d286fc7552c9d5",
+        "name": "用户登录接口",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "54a24533e51bea56",
+            "4498516943741867",
+            "031576a8db7d4707",
+            "ccdf0d01980b5d3a",
+            "035e1711e1884b52",
+            "5cb61c69d3185d66",
+            "a31dbc68e1df1c65",
+            "fa39f83d5d2eaf3e",
+            "90bb2ef2ba0559e4",
+            "d3a5038bb7fdb9e6",
+            "d69f142233da4f9c",
+            "8d0be6aac0a6aa10",
+            "e97c219cfad5978c",
+            "2eaef0066d449991",
+            "ba8169f92aaee884"
+        ],
+        "x": 14,
+        "y": 39,
+        "w": 1732,
+        "h": 422
+    },
+    {
+        "id": "c41a2e7fe856eb31",
+        "type": "MySQLdatabase",
+        "name": "",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "ruoyi-vue-pro",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "260a55ebadf5153b",
+        "type": "function",
+        "z": "dedaf7c3e3658fe7",
+        "name": "提取token",
+        "func": "// 获取请求头中的 Authorization 字段\nconst authorizationHeader = msg.req.headers.authorization;\n\n// 如果 Authorization 头缺失，返回错误\nif (!authorizationHeader) {\n    node.error(\"Authorization header missing\");\n    msg.statusCode = 401;\n    msg.payload = { error: \"Authorization header missing\" };\n    return [null, msg];\n}\n\n// 检查 Authorization 头是否以 \"Bearer \" 开头\nif (!authorizationHeader.startsWith(\"Bearer \")) {\n    node.error(\"Authorization header format is invalid\");\n    msg.statusCode = 401;\n    msg.payload = { error: \"authorization头的格式错误\" };\n    return [null, msg];\n}\n\n// 提取令牌部分\nconst token = authorizationHeader.split(' ')[1];\n\n// 确保 token 是字符串且不为空\nif (!token || typeof token !== 'string') {\n    node.error(\"Bearer token is missing or invalid\");\n    msg.statusCode = 401;\n    msg.payload = { error: \"Bearer token missing or invalid\" };\n    return [null, msg];\n}\n\n// 将提取的 token 传递给 jwt verify 节点\nmsg.payload = token;\nreturn [msg, null];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 220,
+        "y": 220,
+        "wires": [
+            [
+                "b2fb7972fe68ac41"
+            ],
+            [
+                "555d15cda1f222c1"
+            ]
+        ]
+    },
+    {
+        "id": "65b0df063c103cef",
+        "type": "catch",
+        "z": "dedaf7c3e3658fe7",
+        "name": "",
+        "scope": [
+            "b2fb7972fe68ac41"
+        ],
+        "uncaught": false,
+        "x": 440,
+        "y": 160,
+        "wires": [
+            [
+                "555d15cda1f222c1"
+            ]
+        ]
+    },
+    {
+        "id": "b2fb7972fe68ac41",
+        "type": "jwt verify",
+        "z": "dedaf7c3e3658fe7",
+        "name": "",
+        "alg": [
+            "HS256"
+        ],
+        "jwkurl": "",
+        "secret": "1234",
+        "key": "",
+        "signvar": "payload",
+        "storetoken": "payload",
+        "x": 450,
+        "y": 140,
+        "wires": [
+            [
+                "1ab23fc6d0c05fab"
+            ]
+        ]
+    },
+    {
+        "id": "1ab23fc6d0c05fab",
+        "type": "function",
+        "z": "dedaf7c3e3658fe7",
+        "name": "提取用户信息到msg.userInfo",
+        "func": "const _ = global.get('lodash');\n\n\nmsg.userInfo = _.cloneDeep(msg.payload)\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "555d15cda1f222c1",
+        "type": "function",
+        "z": "dedaf7c3e3658fe7",
+        "name": "login: 返回错误消息",
+        "func": "if(msg.error) {\n    console.error(\" ====================================================================================================================================================================== \")\n    console.error(\" ===== 将要返回http错误 ================================================================================================================================================= \")\n    console.error(msg.error)\n    console.error(\" ====================================================================================================================================================================== \")\n    console.error(\" ====================================================================================================================================================================== \")\n}\n\nif(!msg.req || !msg.res) {\n    // 只处理http流程的错误\n    return null\n}\n\nlet _msg = {\n    req: msg.req,\n    res: msg.res,\n    payload: {},\n    statusCode: msg.statusCode ?? 400,\n}\n\n// 组织成vben需要的返回结构\n_msg.payload = {\n    code: 1,\n    data: null,\n    message: msg.error?.message ?? '系统错误',\n}\n\nreturn _msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 400,
+        "wires": [
+            [
+                "e735d90c81f197c3"
+            ]
+        ]
+    },
+    {
+        "id": "e735d90c81f197c3",
+        "type": "http response",
+        "z": "dedaf7c3e3658fe7",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 690,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "c877e5721a72c205",
+        "type": "function",
+        "z": "f069ddcef8ddd50e",
+        "name": "http封装返回错误消息",
+        "func": "if(msg.error) {\n    console.error(\" ====================================================================================================================================================================== \")\n    console.error(\" ===== 将要返回http错误 ================================================================================================================================================= \")\n    console.error(msg.error)\n    console.error(\" ====================================================================================================================================================================== \")\n    console.error(\" ====================================================================================================================================================================== \")\n}\n\nif(!msg.req || !msg.res) {\n    // 只处理http流程的错误\n    return null\n}\n\nlet _msg = {\n    req: msg.req,\n    res: msg.res,\n    payload: {},\n    statusCode: msg.statusCode ?? 400,\n}\n\n// 组织成vben需要的返回结构\n_msg.payload = {\n    code: 1,\n    data: null,\n    message: msg.error?.message ?? '系统错误',\n}\n\nreturn _msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 320,
+        "wires": [
+            [
+                "119ce146f1b4726a"
+            ]
+        ]
+    },
+    {
+        "id": "119ce146f1b4726a",
+        "type": "http response",
+        "z": "f069ddcef8ddd50e",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 630,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "231fc131ed034dda",
+        "type": "function",
+        "z": "3a66b1d0a2011dc7",
+        "name": "http封装返回成功消息",
+        "func": "if(!msg.req || !msg.res) {\n    // 只处理http流程\n    return null\n}\n\nlet _msg = {\n    req: msg.req,\n    res: msg.res,\n    payload: {},\n    statusCode: msg.statusCode ?? 200,\n}\n\n// 组织成vben需要的返回结构\n_msg.payload = {\n    code: 0,\n    data: msg.payload,\n    message: msg.message,\n}\n\nreturn _msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 160,
+        "wires": [
+            [
+                "4ed20af9b72b5e1b",
+                "bdf82f25d4950a88",
+                "9ea1951086f850de"
+            ]
+        ]
+    },
+    {
+        "id": "4ed20af9b72b5e1b",
+        "type": "http response",
+        "z": "3a66b1d0a2011dc7",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 530,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "bdf82f25d4950a88",
+        "type": "debug",
+        "z": "3a66b1d0a2011dc7",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 540,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "9ea1951086f850de",
+        "type": "function",
+        "z": "3a66b1d0a2011dc7",
+        "name": "function 5",
+        "func": "let a = typeof msg.payload.data.mainResult.id\nconsole.log(typeof msg.payload.data.mainResult.id)\ndebugger\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c567794ea8f5c64f",
+        "type": "function",
+        "z": "42dd093e4768803b",
+        "name": "function 1",
+        "func": "let _ = require('lodash')\n\nlet n1 = _.cloneDeep(msg.payload)\n\nmsg.n1 = n1\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 280,
+        "y": 160,
+        "wires": [
+            [
+                "30cfbd03a799aaea"
+            ]
+        ]
+    },
+    {
+        "id": "f93d9c243721c114",
+        "type": "inject",
+        "z": "42dd093e4768803b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"name\":\"111\",\"age\":\"222\"}",
+        "payloadType": "json",
+        "x": 110,
+        "y": 160,
+        "wires": [
+            [
+                "c567794ea8f5c64f"
+            ]
+        ]
+    },
+    {
+        "id": "30cfbd03a799aaea",
+        "type": "debug",
+        "z": "42dd093e4768803b",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 460,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "54a24533e51bea56",
+        "type": "http in",
+        "z": "e4d286fc7552c9d5",
+        "g": "9b9ac8233e7948c8",
+        "name": "login: 接收登录请求",
+        "url": "/api/auth/login",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 130,
+        "y": 100,
+        "wires": [
+            [
+                "4498516943741867",
+                "8d0be6aac0a6aa10"
+            ]
+        ]
+    },
+    {
+        "id": "4498516943741867",
+        "type": "function",
+        "z": "e4d286fc7552c9d5",
+        "g": "9b9ac8233e7948c8",
+        "name": "login: 准备statement",
+        "func": "/**\n * msg.payload={}\n * msg.payload.userToChange=42;\n * msg.payload.newUsername=\"example-user\";\n * msg.topic=\"INSERT INTO users (`userid`, `username`) VALUES (:userToChange, :newUsername) ON DUPLICATE KEY UPDATE `username`=:newUsername;\"\n * return msg;\n */\nlet _msg = {\n    req: msg.req,\n    res: msg.res,\n    payload: {}\n}\n_msg.payload.username = msg.payload.username\n_msg.payload.password = msg.payload.password\n_msg.topic = \"SELECT id,username,password FROM system_users WHERE username = :username AND password = :password AND deleted = '0' AND status = 0;\"\nreturn _msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 100,
+        "wires": [
+            [
+                "ccdf0d01980b5d3a",
+                "035e1711e1884b52"
+            ]
+        ]
+    },
+    {
+        "id": "031576a8db7d4707",
+        "type": "comment",
+        "z": "e4d286fc7552c9d5",
+        "g": "9b9ac8233e7948c8",
+        "name": "接口入参示例",
+        "info": "{\n    \"payload\": {\n\t\t\"selectAccount\": \"admin\",\n\t\t\"username\": \"admin\",\n\t\t\"password\": \"admin\",\n\t\t\"captcha\": true\n\t},\n}",
+        "x": 110,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "ccdf0d01980b5d3a",
+        "type": "debug",
+        "z": "e4d286fc7552c9d5",
+        "d": true,
+        "g": "9b9ac8233e7948c8",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "035e1711e1884b52",
+        "type": "mysql",
+        "z": "e4d286fc7552c9d5",
+        "g": "9b9ac8233e7948c8",
+        "mydb": "c41a2e7fe856eb31",
+        "name": "login: 查询登录用户",
+        "x": 590,
+        "y": 160,
+        "wires": [
+            [
+                "5cb61c69d3185d66",
+                "a31dbc68e1df1c65"
+            ]
+        ]
+    },
+    {
+        "id": "5cb61c69d3185d66",
+        "type": "debug",
+        "z": "e4d286fc7552c9d5",
+        "d": true,
+        "g": "9b9ac8233e7948c8",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "a31dbc68e1df1c65",
+        "type": "function",
+        "z": "e4d286fc7552c9d5",
+        "g": "9b9ac8233e7948c8",
+        "name": "login: 处理DB查询结果",
+        "func": "/**\n * 从上游拿到的msg.payload格式：\n * [{\n *    \"count\": 1,\n *    \"username\": \"admin\",\n *    \"password\": \"admin\"\n * }]\n */\n\n\nlet _msg = {\n    req: msg.req,\n    res: msg.res\n}\n\n// node.warn(\"msg.payload is array: \" + Array.isArray(msg.payload));\n// node.warn(\"msg.payload[0] exists: \" + (msg.payload[0] !== undefined));\n// node.warn(\"msg.payload[0] is object: \" + (msg.payload[0] instanceof Object));\n// node.warn(\"'count' in msg.payload[0]: \" + ('count' in msg.payload[0]));\n\n// if (msg.payload[0] == null) {\n//     node.warn(\"msg.payload[0] is null or undefined\");\n// } else {\n//     node.warn(\"msg.payload[0] type: \" + typeof msg.payload[0]);\n// }\n\nif (!(Array.isArray(msg.payload))) {\n    msg.error = new Error(\"系统错误，未知错误。\")\n    return [null, msg]\n}\n\n// _count是查询到的数据条目数\nlet _count = msg.payload.length;\n\nif (_count === 1) {\n    // 登录成功\n\n    // payload组织成jwt节点需要的数据\n    _msg.payload = {\n        userId: msg.payload[0].id,\n        username: msg.payload[0].username\n    };\n    // 返回给前端的数据\n    _msg.user = {\n        userId: msg.payload[0].id,\n        username: msg.payload[0].username\n    };\n    return [_msg, null];\n} else if (_count === 0) {\n    // 登录失败，返回错误消息\n    msg.statusCode = 401\n    msg.error = new Error(\"用户名或密码错误\")\n    return [null, msg]\n} else {\n    // 登录失败，返回错误消息\n    msg.error = new Error(\"系统错误，数据库用户信息重复。\")\n    return [null, msg]\n}\n\n\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 900,
+        "y": 160,
+        "wires": [
+            [
+                "fa39f83d5d2eaf3e",
+                "d69f142233da4f9c"
+            ],
+            [
+                "ba8169f92aaee884"
+            ]
+        ]
+    },
+    {
+        "id": "fa39f83d5d2eaf3e",
+        "type": "jwt sign",
+        "z": "e4d286fc7552c9d5",
+        "g": "9b9ac8233e7948c8",
+        "name": "login: 生成token",
+        "alg": "HS256",
+        "exp": 3600,
+        "jwkurl": "",
+        "jwkkid": "",
+        "secret": "1234",
+        "key": "",
+        "signvar": "payload",
+        "storetoken": "payload",
+        "x": 1220,
+        "y": 160,
+        "wires": [
+            [
+                "90bb2ef2ba0559e4"
+            ]
+        ]
+    },
+    {
+        "id": "90bb2ef2ba0559e4",
+        "type": "function",
+        "z": "e4d286fc7552c9d5",
+        "g": "9b9ac8233e7948c8",
+        "name": "login: 返回成功消息",
+        "func": "/**\n * http返回案例如下：\n * {\n    \"code\": 0,\n    \"data\": {\n        \"id\": 0,\n        \"password\": \"123456\",\n        \"realName\": \"Vben11\",\n        \"roles\": [\n            \"super\"\n        ],\n        \"username\": \"vben\",\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MCwicGFzc3dvcmQiOiIxMjM0NTYiLCJyZWFsTmFtZSI6IlZiZW4iLCJyb2xlcyI6WyJzdXBlciJdLCJ1c2VybmFtZSI6InZiZW4iLCJpYXQiOjE3Mjg5OTUxMDEsImV4cCI6MTcyOTU5OTkwMX0.POyRQlMCOXdvJS0YPw6LA9y5xtv-x4OW3vpeetkTs7A\"\n    },\n    \"error\": null,\n    \"message\": \"ok\"\n}\n */\n\nlet _msg = {\n    req: msg.req,\n    res: msg.res\n}\n\nlet accessToken = msg.payload\n\n_msg.payload = {\n    code: 0,\n    data: {\n        id: msg.user.id,\n        username: msg.user.username,\n        accessToken\n    },\n    error: null,\n    message: \"ok\"\n}\n\n\n_msg.statusCode = 200\n\nreturn _msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1470,
+        "y": 160,
+        "wires": [
+            [
+                "d3a5038bb7fdb9e6"
+            ]
+        ]
+    },
+    {
+        "id": "d3a5038bb7fdb9e6",
+        "type": "http response",
+        "z": "e4d286fc7552c9d5",
+        "g": "9b9ac8233e7948c8",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1670,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "d69f142233da4f9c",
+        "type": "debug",
+        "z": "e4d286fc7552c9d5",
+        "d": true,
+        "g": "9b9ac8233e7948c8",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "8d0be6aac0a6aa10",
+        "type": "debug",
+        "z": "e4d286fc7552c9d5",
+        "d": true,
+        "g": "9b9ac8233e7948c8",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 320,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "e97c219cfad5978c",
+        "type": "catch",
+        "z": "e4d286fc7552c9d5",
+        "d": true,
+        "g": "9b9ac8233e7948c8",
+        "name": "http捕获登录错误 ",
+        "scope": [
+            "54a24533e51bea56",
+            "4498516943741867",
+            "035e1711e1884b52",
+            "a31dbc68e1df1c65",
+            "fa39f83d5d2eaf3e",
+            "90bb2ef2ba0559e4"
+        ],
+        "uncaught": false,
+        "x": 120,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2eaef0066d449991",
+        "type": "catch",
+        "z": "e4d286fc7552c9d5",
+        "g": "9b9ac8233e7948c8",
+        "name": "",
+        "scope": [
+            "4498516943741867",
+            "035e1711e1884b52",
+            "fa39f83d5d2eaf3e"
+        ],
+        "uncaught": false,
+        "x": 920,
+        "y": 420,
+        "wires": [
+            [
+                "ba8169f92aaee884"
+            ]
+        ]
+    },
+    {
+        "id": "62cef4f5e1b4d077",
+        "type": "http in",
+        "z": "e4d286fc7552c9d5",
+        "name": "",
+        "url": "/api/user/info",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 130,
+        "y": 680,
+        "wires": [
+            [
+                "00e4458b98b8a905"
+            ]
+        ]
+    },
+    {
+        "id": "fb139b5952fda6f7",
+        "type": "function",
+        "z": "e4d286fc7552c9d5",
+        "name": "function 2",
+        "func": "let _msg = {\n  req: msg.req,\n  res: msg.res,\n}\n\n_msg.payload = {\n  \"code\": 0,\n  \"data\": {\n    \"id\": msg.payload.userId,\n    \"roles\": [\n      \n    ],\n    \"username\": msg.payload.username\n  },\n  \"message\": \"查询成功\"\n}\n_msg.statusCode = 200\n\nreturn _msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 680,
+        "wires": [
+            [
+                "6eb7fe22ae398084"
+            ]
+        ]
+    },
+    {
+        "id": "6eb7fe22ae398084",
+        "type": "http response",
+        "z": "e4d286fc7552c9d5",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "3a541e9f3668c182",
+        "type": "http in",
+        "z": "e4d286fc7552c9d5",
+        "name": "",
+        "url": "/api/auth/codes",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 130,
+        "y": 840,
+        "wires": [
+            [
+                "8958daedf4d44bb1"
+            ]
+        ]
+    },
+    {
+        "id": "2ee50c8daa610976",
+        "type": "http response",
+        "z": "e4d286fc7552c9d5",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 520,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "8958daedf4d44bb1",
+        "type": "function",
+        "z": "e4d286fc7552c9d5",
+        "name": "function 3",
+        "func": "msg.payload = {\n  \"code\": 0,\n  \"data\": [\n    \"AC_100100\",\n    \"AC_100110\",\n    \"AC_100120\",\n    \"AC_100010\"\n  ],\n  \"error\": null,\n  \"message\": \"ok\"\n}\nmsg.statusCode = 200\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 840,
+        "wires": [
+            [
+                "2ee50c8daa610976"
+            ]
+        ]
+    },
+    {
+        "id": "00e4458b98b8a905",
+        "type": "subflow:dedaf7c3e3658fe7",
+        "z": "e4d286fc7552c9d5",
+        "name": "",
+        "x": 360,
+        "y": 680,
+        "wires": [
+            [
+                "fb139b5952fda6f7"
+            ]
+        ]
+    },
+    {
+        "id": "ba8169f92aaee884",
+        "type": "subflow:f069ddcef8ddd50e",
+        "z": "e4d286fc7552c9d5",
+        "g": "9b9ac8233e7948c8",
+        "name": "",
+        "x": 1200,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "b6db484c7c260d64",
+        "type": "http in",
+        "z": "157fed32d6e19e95",
+        "name": "",
+        "url": "/api/ycfb/lct/addOneLct",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 220,
+        "y": 160,
+        "wires": [
+            [
+                "b3783ec76f73cbfd",
+                "dc636cdd69f648a5"
+            ]
+        ],
+        "info": "// msg\n{\n    // msg.payload是post请求的请求体\n    payload: {\n        name: \"流程图11\",\n        code: \"lct11\",\n        content: \"\", // 流程图json文件\n        status: 0 // 0正常 1禁用\n    }\n}"
+    },
+    {
+        "id": "a6ef2629d16c103e",
+        "type": "comment",
+        "z": "157fed32d6e19e95",
+        "name": "新建一张流程图",
+        "info": "",
+        "x": 180,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "b3783ec76f73cbfd",
+        "type": "function",
+        "z": "157fed32d6e19e95",
+        "name": "插入一条流程图",
+        "func": "(async () => {\n    \n    try {\n        let prisma = global.get('prisma');\n\n        msg.payload = await prisma.$transaction(async () => {\n            const mainResult = await prisma.ycfb_lct.create({\n                data: {\n                    name: msg.payload.ycfbLct?.name,\n                    code: msg.payload.ycfbLct?.code,\n                }\n            });\n\n            const detailResult = await prisma.ycfb_lct_detail.create({\n                data: {\n                    main_id: mainResult.id, // 使用 mainResult 的 id 确保关联正确\n                    content: '{}', // content\n                },\n            });\n\n            // #endregion\n\n            return { mainResult, detailResult };\n        })\n        msg.message = '新建流程图成功'\n        node.send(msg);\n    }catch(e) {\n        // 使用第二个参数传递 msg，以便 catch 节点能够捕获到\n        node.error(e, msg);\n    }\n    \n})();",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 160,
+        "wires": [
+            [
+                "39f54561fc3abc48",
+                "284a30ac6108977f"
+            ]
+        ],
+        "inputLabels": [
+            "payload携带数据"
+        ],
+        "icon": "node-red/db.svg"
+    },
+    {
+        "id": "39f54561fc3abc48",
+        "type": "debug",
+        "z": "157fed32d6e19e95",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "8e71de57cd1cc829",
+        "type": "catch",
+        "z": "157fed32d6e19e95",
+        "name": "",
+        "scope": [
+            "b3783ec76f73cbfd"
+        ],
+        "uncaught": false,
+        "x": 660,
+        "y": 580,
+        "wires": [
+            [
+                "503e49642e85ee97",
+                "9827e2f76a195b3e",
+                "f61cf7cbe1ebfab5"
+            ]
+        ]
+    },
+    {
+        "id": "503e49642e85ee97",
+        "type": "subflow:f069ddcef8ddd50e",
+        "z": "157fed32d6e19e95",
+        "name": "",
+        "x": 960,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "9827e2f76a195b3e",
+        "type": "debug",
+        "z": "157fed32d6e19e95",
+        "name": "报错提示",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "f61cf7cbe1ebfab5",
+        "type": "function",
+        "z": "157fed32d6e19e95",
+        "name": "报错提示",
+        "func": "node.error(msg.error.message);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "dc636cdd69f648a5",
+        "type": "debug",
+        "z": "157fed32d6e19e95",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 540,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "284a30ac6108977f",
+        "type": "subflow:3a66b1d0a2011dc7",
+        "z": "157fed32d6e19e95",
+        "name": "",
+        "x": 780,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "17efb2cb3c6b0c5f",
+        "type": "function",
+        "z": "0f56bc24f4500716",
+        "name": "function 4",
+        "func": "const {PrismaClient} = require('@prisma/client')\nconst crypto = require('crypto');\n\n// 使用单例模式保证实例只有一个\nlet prisma;\n\nif (!prisma) {\n    prisma = new PrismaClient();\n    prisma.uniqueId = crypto.randomUUID();\n    console.log('Prisma instance created:', prisma); // 打印实例以确认\n}\n\nprisma.$use(async (params, next) => {\n  const result = await next(params);\n\n  // 递归遍历对象，将 BigInt 转换为 Number\n  function convertBigIntToNumber(obj) {\n    if (typeof obj === 'bigint') {\n      return Number(obj);\n    } else if (Array.isArray(obj)) {\n      return obj.map(convertBigIntToNumber);\n    } else if (typeof obj === 'object' && obj !== null) {\n      return Object.fromEntries(\n        Object.entries(obj).map(([key, value]) => [key, convertBigIntToNumber(value)])\n      );\n    }\n    return obj;\n  }\n\n  return convertBigIntToNumber(result);\n});\n\nglobal.set('prisma',prisma)\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 280,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2b8ff3eca2703374",
+        "type": "inject",
+        "z": "0f56bc24f4500716",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.01",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 160,
+        "wires": [
+            [
+                "17efb2cb3c6b0c5f"
+            ]
+        ]
+    },
+    {
+        "id": "2fc9cc02fba3582b",
+        "type": "function",
+        "z": "60783db58ebac2b0",
+        "name": "mysql连接池管理",
+        "func": "try {\n    // 项目根路径\n    let appRoot = require('app-root-path');\n    // nodejs path库\n    const path = require('path');\n\n    // #endregion\n\n    // #region import引入prismaInstance prisma连接池\n\n    // prismaInstance的绝对路径\n    let prismaInstancePath = path.join(appRoot.path, '/common/prismaInstance.cjs');\n    // 引入prismaInstance\n\n    const prismaInstance = require(prismaInstancePath);\n\n    (async function () {\n        try {\n            await prismaInstance.$connect();\n            console.log('Prisma instance connected successfully.');\n        } catch (error) {\n            console.error('Failed to connect to the database with Prisma instance:', error);\n        }\n    })()\n\n} catch (e) {\n    console.error(e)\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "54ce10138066293b",
+        "type": "inject",
+        "z": "60783db58ebac2b0",
+        "name": "周期性检查",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 140,
+        "wires": [
+            [
+                "2fc9cc02fba3582b"
+            ]
+        ]
+    },
+    {
+        "id": "39e810762270d6a1",
+        "type": "http in",
+        "z": "511e0991817895ea",
+        "name": "",
+        "url": "/graphql",
+        "method": "post",
+        "upload": true,
+        "swaggerDoc": "",
+        "x": 100,
+        "y": 220,
+        "wires": [
+            [
+                "bdcf2c1825fffaeb"
+            ]
+        ]
+    },
+    {
+        "id": "bdcf2c1825fffaeb",
+        "type": "function",
+        "z": "511e0991817895ea",
+        "name": "GraphQL 处理",
+        "func": "const { graphql, buildSchema } = require('graphql');\n\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    }
+]
