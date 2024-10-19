@@ -838,8 +838,7 @@
         "y": 160,
         "wires": [
             [
-                "b3783ec76f73cbfd",
-                "dc636cdd69f648a5"
+                "b3783ec76f73cbfd"
             ]
         ],
         "info": "// msg\n{\n    // msg.payload是post请求的请求体\n    payload: {\n        name: \"流程图11\",\n        code: \"lct11\",\n        content: \"\", // 流程图json文件\n        status: 0 // 0正常 1禁用\n    }\n}"
@@ -870,7 +869,6 @@
         "y": 160,
         "wires": [
             [
-                "39f54561fc3abc48",
                 "284a30ac6108977f"
             ]
         ],
@@ -878,23 +876,6 @@
             "payload携带数据"
         ],
         "icon": "node-red/db.svg"
-    },
-    {
-        "id": "39f54561fc3abc48",
-        "type": "debug",
-        "z": "157fed32d6e19e95",
-        "name": "debug 6",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 760,
-        "y": 80,
-        "wires": []
     },
     {
         "id": "8e71de57cd1cc829",
@@ -920,22 +901,6 @@
         "name": "",
         "x": 960,
         "y": 580,
-        "wires": []
-    },
-    {
-        "id": "dc636cdd69f648a5",
-        "type": "debug",
-        "z": "157fed32d6e19e95",
-        "name": "debug 7",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 540,
-        "y": 260,
         "wires": []
     },
     {
