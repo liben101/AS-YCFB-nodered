@@ -1028,7 +1028,7 @@
         "type": "function",
         "z": "0f56bc24f4500716",
         "name": "全局方法：httpHandleErrors",
-        "func": "global.set(\"httpHandleErrors\", async function handleAsyncErrors(fn, msg) {\n    try {\n        return await fn(msg);\n    } catch (err) {\n        node.error(\"Error occurred: \" + err, msg);\n        console.error(err);\n        // 异常发生时返回 http错误\n        // 捕获到异常时返回 HTTP 错误，使用 Express res 对象\n        if (msg.res) {\n            msg.res.status(500).json({\n                error: \"服务器错误\",\n                message: err.message\n            });\n        }\n        // 返回 null 停止消息的进一步传递，因为响应已经发送\n        return null;\n    }\n});",
+        "func": "global.set(\"httpHandleErrors\", async function handleAsyncErrors(fn, msg) {\n    try {\n        return await fn(msg);\n    } catch (err) {\n        node.error(\"Error occurred: \" + err, msg);\n        console.error(err);\n        // 异常发生时返回 http错误\n        // 捕获到异常时返回 HTTP 错误，使用 Express res 对象\n        if (msg.res) {\n            msg.res.status( msg.statusCode ?? 500).json({\n                error: \"服务器错误\",\n                message: err.message\n            });\n        }\n        // 返回 null 停止消息的进一步传递，因为响应已经发送\n        return null;\n    }\n});",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
