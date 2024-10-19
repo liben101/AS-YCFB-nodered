@@ -465,7 +465,7 @@
         "z": "e4d286fc7552c9d5",
         "g": "9b9ac8233e7948c8",
         "name": "login: 准备statement",
-        "func": "/**\n * msg.payload={}\n * msg.payload.userToChange=42;\n * msg.payload.newUsername=\"example-user\";\n * msg.topic=\"INSERT INTO users (`userid`, `username`) VALUES (:userToChange, :newUsername) ON DUPLICATE KEY UPDATE `username`=:newUsername;\"\n * return msg;\n */\nlet _msg = {\n    req: msg.req,\n    res: msg.res,\n    payload: {}\n}\n_msg.payload.username = msg.payload.username\n_msg.payload.password = msg.payload.password\n_msg.topic = \"SELECT id,username,password FROM system_users WHERE username = :username AND password = :password AND deleted = '0' AND status = 0;\"\nreturn _msg;",
+        "func": "/**\n * msg.payload={}\n * msg.payload.userToChange=42;\n * msg.payload.newUsername=\"example-user\";\n * msg.topic=\"INSERT INTO users (`userid`, `username`) VALUES (:userToChange, :newUsername) ON DUPLICATE KEY UPDATE `username`=:newUsername;\"\n * return msg;\n */\n(async () => {\n\n    try {\n        let _msg = {\n            req: msg.req,\n            res: msg.res,\n            payload: {}\n        }\n        _msg.payload.username = msg.payload.username\n        _msg.payload.password = msg.payload.password\n        _msg.topic = \"SELECT id,username,password FROM system_users WHERE username = :username AND password = :password AND deleted = '0' AND status = 0;\"\n        return _msg;\n    } catch (e) {\n        console.error(e)\n        msg.res.status(400).send(e);\n    }\n\n\n})()",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
