@@ -909,9 +909,7 @@
         "y": 580,
         "wires": [
             [
-                "503e49642e85ee97",
-                "9827e2f76a195b3e",
-                "f61cf7cbe1ebfab5"
+                "503e49642e85ee97"
             ]
         ]
     },
@@ -923,41 +921,6 @@
         "x": 960,
         "y": 580,
         "wires": []
-    },
-    {
-        "id": "9827e2f76a195b3e",
-        "type": "debug",
-        "z": "157fed32d6e19e95",
-        "name": "报错提示",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 920,
-        "y": 520,
-        "wires": []
-    },
-    {
-        "id": "f61cf7cbe1ebfab5",
-        "type": "function",
-        "z": "157fed32d6e19e95",
-        "name": "报错提示",
-        "func": "node.error(msg.error.message);\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 920,
-        "y": 480,
-        "wires": [
-            []
-        ]
     },
     {
         "id": "dc636cdd69f648a5",
