@@ -832,7 +832,7 @@
         "name": "",
         "url": "/api/ycfb/lct/addOneLct",
         "method": "post",
-        "upload": false,
+        "upload": true,
         "swaggerDoc": "",
         "x": 280,
         "y": 160,
@@ -910,6 +910,31 @@
         "info": "",
         "x": 80,
         "y": 160,
+        "wires": []
+    },
+    {
+        "id": "ea82160b5fc74d08",
+        "type": "http in",
+        "z": "157fed32d6e19e95",
+        "name": "",
+        "url": "/api/ycfb/lct/paginationQuery",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 300,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4cc42dfd1a20a967",
+        "type": "comment",
+        "z": "157fed32d6e19e95",
+        "name": "分页查询流程图",
+        "info": "",
+        "x": 80,
+        "y": 220,
         "wires": []
     },
     {
