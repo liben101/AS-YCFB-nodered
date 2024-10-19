@@ -979,7 +979,7 @@
         "id": "17efb2cb3c6b0c5f",
         "type": "function",
         "z": "0f56bc24f4500716",
-        "name": "function 4",
+        "name": "prisma连接池",
         "func": "(async() => {\n\n  let require = global.get('require');\n\n  const { PrismaClient } = require('@prisma/client')\n  const crypto = require('crypto');\n\n  // 使用单例模式保证实例只有一个\n  let prisma;\n\n  if (!prisma) {\n    prisma = new PrismaClient();\n    prisma.uniqueId = crypto.randomUUID();\n    console.log('Prisma instance created:', prisma); // 打印实例以确认\n  }\n\n  prisma.$use(async (params, next) => {\n    const result = await next(params);\n\n    // 递归遍历对象，将 BigInt 转换为 Number\n    function convertBigIntToNumber(obj) {\n      if (typeof obj === 'bigint') {\n        return Number(obj);\n      } else if (Array.isArray(obj)) {\n        return obj.map(convertBigIntToNumber);\n      } else if (typeof obj === 'object' && obj !== null) {\n        return Object.fromEntries(\n          Object.entries(obj).map(([key, value]) => [key, convertBigIntToNumber(value)])\n        );\n      }\n      return obj;\n    }\n\n    return convertBigIntToNumber(result);\n  });\n\n  global.set('prisma', prisma)\n\n})()\n",
         "outputs": 1,
         "timeout": 0,
@@ -987,7 +987,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 280,
+        "x": 300,
         "y": 160,
         "wires": [
             []
@@ -1018,8 +1018,27 @@
         "y": 160,
         "wires": [
             [
-                "17efb2cb3c6b0c5f"
+                "17efb2cb3c6b0c5f",
+                "5b307ae3a14b6010"
             ]
+        ]
+    },
+    {
+        "id": "5b307ae3a14b6010",
+        "type": "function",
+        "z": "0f56bc24f4500716",
+        "name": "全局方法：httpHandleErrors",
+        "func": "global.set(\"httpHandleErrors\", async function handleAsyncErrors(fn, msg) {\n    try {\n        return await fn(msg);\n    } catch (err) {\n        node.error(\"Error occurred: \" + err, msg);\n        console.error(err);\n        // 异常发生时返回 http错误\n        // 捕获到异常时返回 HTTP 错误，使用 Express res 对象\n        if (msg.res) {\n            msg.res.status(500).json({\n                error: \"服务器错误\",\n                message: err.message\n            });\n        }\n        // 返回 null 停止消息的进一步传递，因为响应已经发送\n        return null;\n    }\n});",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 220,
+        "wires": [
+            []
         ]
     },
     {
