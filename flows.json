@@ -832,7 +832,7 @@
         "name": "",
         "url": "/api/ycfb/lct/addOneLct",
         "method": "post",
-        "upload": true,
+        "upload": false,
         "swaggerDoc": "",
         "x": 280,
         "y": 160,
