@@ -838,7 +838,7 @@
         "y": 160,
         "wires": [
             [
-                "b3783ec76f73cbfd"
+                "acb0361cfa80a007"
             ]
         ],
         "info": "// msg\n{\n    // msg.payload是post请求的请求体\n    payload: {\n        name: \"流程图11\",\n        code: \"lct11\",\n        content: \"\", // 流程图json文件\n        status: 0 // 0正常 1禁用\n    }\n}"
@@ -952,7 +952,9 @@
         "x": 520,
         "y": 160,
         "wires": [
-            []
+            [
+                "b3783ec76f73cbfd"
+            ]
         ]
     },
     {
