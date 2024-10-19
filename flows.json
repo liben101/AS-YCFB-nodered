@@ -838,7 +838,7 @@
         "y": 160,
         "wires": [
             [
-                "b3783ec76f73cbfd"
+                "d92023913a770901"
             ]
         ],
         "info": "// msg\n{\n    // msg.payload是post请求的请求体\n    payload: {\n        name: \"流程图11\",\n        code: \"lct11\",\n        content: \"\", // 流程图json文件\n        status: 0 // 0正常 1禁用\n    }\n}"
@@ -855,7 +855,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 500,
+        "x": 720,
         "y": 160,
         "wires": [
             [
@@ -898,7 +898,7 @@
         "type": "subflow:3a66b1d0a2011dc7",
         "z": "157fed32d6e19e95",
         "name": "",
-        "x": 700,
+        "x": 940,
         "y": 160,
         "wires": []
     },
@@ -936,6 +936,20 @@
         "x": 80,
         "y": 220,
         "wires": []
+    },
+    {
+        "id": "d92023913a770901",
+        "type": "multer-upload",
+        "z": "157fed32d6e19e95",
+        "name": "",
+        "destination": "uploads",
+        "x": 520,
+        "y": 160,
+        "wires": [
+            [
+                "b3783ec76f73cbfd"
+            ]
+        ]
     },
     {
         "id": "17efb2cb3c6b0c5f",
