@@ -26,7 +26,7 @@
     {
         "id": "0f56bc24f4500716",
         "type": "tab",
-        "label": "prisma连接池",
+        "label": "全局方法",
         "disabled": false,
         "info": "",
         "env": []
